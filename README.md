@@ -1,5 +1,13 @@
 
-基于Wolai API编写的python库
+# 基于Wolai API 封装python库
+
+> 目前功能就两个创建块和获取快
+
+安装
+
+```bash
+pip install git+https://github.com/xuzhougeng/pywolai
+```
 
 ## 使用案例
 
