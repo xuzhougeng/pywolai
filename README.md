@@ -49,3 +49,14 @@ api.create_block(parent_id , text)
 # 创建多个block
 api.create_blocks(parent_id , [text,text2])
 ```
+
+
+## 图片下载
+
+API只能获取块的信息，图片需要额外的下载
+
+```python
+api.download_media(media_id="媒体的ID")
+```
+
+默认下载在当前的目录下，用媒体的ID作为文件名

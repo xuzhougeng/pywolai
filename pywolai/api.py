@@ -1,7 +1,7 @@
 from typing import List
 import requests
 import json
-from pywolai.enums import ErrorCode
+from pywolai.enums import ErrorCode, BlockTypes
 from pywolai.block import Block
 from pywolai.block_format import BlockFormat
 
@@ -111,6 +111,35 @@ class WolaiApi:
         block_list = [ BlockFormat(**block) for block in data ]
 
         return block_list
+
+    # download media
+    def download_media(self, media_id:str, output_dir:str=".", file_name:str=None):
+        """
+        :param media_id: 媒体ID
+        :param output_dir: 输出目录, 默认当前目录
+        :param file_name: 文件名, 默认使用媒体ID
+        """
+
+        media_block_info = self.get_block(media_id)
+        if media_block_info.type not in [ 
+            BlockTypes.IMAGE.value,
+            BlockTypes.AUDIO.value,
+            BlockTypes.VIDEO.value,
+        ]:
+            raise Exception(ErrorCode.REQUEST_ERROR , "请求的并非媒体" )
+        
+        media_url = media_block_info.other_fields['media']['download_url']
+        # 获取文件类型
+        file_type = media_url.split(".")[-1]
+        # 获取文件名
+        if file_name is None:
+            file_name = media_id + "." + file_type
+
+        # 下载文件
+        response = requests.get(media_url, stream=True)
+        with open(output_dir + "/" + file_name, "wb") as f:
+            for chunk in response.iter_content(chunk_size=512):
+                f.write(chunk)
 
     def create_block(self, parent_id:str, block:Block ):
         """
