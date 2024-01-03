@@ -2,3 +2,4 @@ build
 dist
 pywolai.egg-info
 pywolai/__pycache__/
+.idea

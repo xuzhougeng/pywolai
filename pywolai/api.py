@@ -1,9 +1,10 @@
 from typing import List
 import requests
 import json
-from pywolai.enums import ErrorCode, BlockTypes
+from pywolai.enums import ErrorCode, BlockTypes, RequestMethod, RequestAddr
 from pywolai.block import Block
 from pywolai.block_format import BlockFormat
+from pywolai.database_format import DatabaseFormat
 
 def safe_request(url, method, params=None, data=None, headers=None):
     """安全请求
@@ -176,6 +177,25 @@ class WolaiApi:
 
         return data
 
-    
-    # Database
-    # TODO: Database API
+    def get_database(self, database_id:str) -> DatabaseFormat:
+        """
+        :param database_id: 数据库ID
+        :return 序列化后的数据库实例
+        """
+        url = RequestAddr.DATABASE_GET % (self._base_url, database_id)
+
+        data = safe_request(url, RequestMethod.GET, headers={"Authorization": self.get_token()})
+        return DatabaseFormat(**data)
+
+    def insert_database(self, database_id:str, value:[{str:any}]):
+        """
+        :param database_id: 数据库ID
+        :return:
+        """
+        url = RequestAddr.DATABASE_INSERT % (self._base_url, database_id)
+        data = {
+            "rows": value
+        }
+
+        data = safe_request(url, "POST", data = data, headers={"Authorization": self.get_token()})
+        return data
