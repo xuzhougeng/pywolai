@@ -7,3 +7,5 @@ from pywolai.enums.text_align import TextAlign
 from pywolai.enums.rich_text import RichText
 
 from pywolai.enums.error_code import ErrorCode
+
+from pywolai.enums.request_enum import RequestMethod, RequestAddr
